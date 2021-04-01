@@ -3,9 +3,10 @@
 }
 .about h2{
     text-align: center;
-    color: black;
-    border-bottom: 2px solid black;
+    color: gray;
+    border-bottom: 2px solid gray;
     display: inline-block;
+    font-weight: 100;
     
 }
 

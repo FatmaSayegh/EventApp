@@ -1,21 +1,18 @@
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.utils.text import slugify
 # Create your models here.
 
 
 # The first model is called Users and contains the General info about the user
 # id, Name, email, password
 
+"""
 class EventUsers(models.Model):
     NAME_SIZE = 200
     MAIL_SIZE = 200
     PASSWORD_SIZE = 50
-    
-    # general
-    user_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=NAME_SIZE)
-    mail = models.EmailField(max_length=MAIL_SIZE)
-    password = models.CharField(max_length=PASSWORD_SIZE)
+"""
         
 
 
@@ -25,7 +22,7 @@ class AboutUser(models.Model):
     STATUS_IDS = [('S', 'Single'), ('IR', "In a Relationship"), ('M', "Married"),('W', "Widowed")]
     OCCUPATION_IDS = [('S', 'Student'), ('NAN', "Invalid"), ('W', "Worker"),('E', "Entrepreneur")]
     
-    user = models.OneToOneField(EventUsers, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     #about
     dob = models.DateField()
     gender = models.CharField(max_length=1,choices=GENDER_IDS)
@@ -46,7 +43,7 @@ AboutUser.gender_from_id = staticmethod(AboutUser.gender_from_id)
 class UserGoals(models.Model):
     GOAL_SIZE=200
     BIO_LENGTH = 600;
-    user = models.OneToOneField(EventUsers, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     # goals
     goal_1 = models.CharField(max_length=200)
     goal_2 = models.CharField(max_length=200)
@@ -71,12 +68,19 @@ class Events(models.Model):
     name = models.CharField(max_length=NAME_SIZE)
     image = models.FileField(upload_to = 'event_images')
     location = models.CharField(max_length=LOCATION_LENGTH, choices=LOCATIONS)
-    creator = models.ForeignKey(EventUsers, on_delete=models.CASCADE) 
+    creator = models.ForeignKey(User, on_delete=models.CASCADE) 
+    event_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(unique=True)
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name + str(self.event_id))
+        super(Events, self).save(*args, **kwargs)
     
 """
 - User - Event
 """
 
 class EventParticipation(models.Model):
-    user = models.ForeignKey(EventUsers, on_delete=models.CASCADE, primary_key=False) 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, primary_key=False) 
     event = models.ForeignKey(Events, on_delete=models.CASCADE, primary_key=False) 

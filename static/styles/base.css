@@ -1,6 +1,7 @@
  body{
     margin: 0px;
-    font-family: sans-serif
+    font-family: sans-serif;
+    background-color: rgb(240, 240, 240);
 }
 
 header div, footer{
@@ -12,7 +13,7 @@ header div, footer{
     background-color: rgb(240, 240, 240);
 }
 
-header img{
+header img.logo{
     width: 10%;
 }
 
@@ -27,26 +28,41 @@ ul.nav{
 .nav li{
     display: inline-block;
     margin: 0px 10px;
+
 }
 
 .nav li a{
     text-transform: uppercase;
     color: gray;
-    font-size: 15px;
-    text-decoration: 
+    font-size: 13px;
+    text-decoration: none;
 }
 
+.search img{
+    width: 20px;
+}
+
+.search input{
+    border-radius: 5px;
+    border: 1px solid rgb(100,100,100);
+    padding: 3px;
+}
 
 body div.base{
-    padding: 30px 0px 60px 0px;
-    border-bottom: 1px solid gray;
+    padding: 10px 0px 60px 0px;
+    border-bottom: 1px solid lightgray;
     background-color: rgb(240, 240, 240);
+    
+   
 }
 
 body div.base h1{
     padding: 0px;
     margin: 0px;
     text-align: center;
+    color: rgb(100,100,100);
+    font-family: cursive;
+    font-size: 60px;
 }
 
 body div.base h4{
@@ -54,11 +70,19 @@ body div.base h4{
     padding: 0px;
     font-weight: 100;
     text-align: center;
+    font-size: 15px;
+    color: rgb(130,130,130)
 
 }
 
 
 footer{
-    border-top: 1px solid gray;
+    border-top: 1px solid lightgray;
 }
 
+.container{
+    min-height: 350px;
+    background-color: white;
+    padding: 0px;
+    margin: 0px;
+}

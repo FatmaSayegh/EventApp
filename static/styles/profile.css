@@ -1,14 +1,69 @@
-.container ul{
+.profile{
+    padding: 10px;
+    text-align: center;
+}
+.profile h1{
+    font-size: 20px;
+    text-align: center;
+    margin: 0px;
+    font-weight: 100;
+    
+}
+
+.profile div{
+    width: 30%;
+    text-align: center;
+    display: inline-block;
+    vertical-align: top;
+}
+.profile ul{
     list-style-type: none;
+    text-align: left;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    height: 120px;
+
+}
+.profile ul li:first-child{
+    text-align: center;
+    display: block;
+    font-size: 22px;
+    color: gray;
+    font-weight: 100;
+    text-transform: capitalize;
 }
 
-.container li h4{
+.profile ul li{
+    margin: 0px 10px;
+    font-weight: 100;
+    font-size: 13px;
+    text-transform: lowercase;
+
+    
+}
+.profile li h4{
     display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 200;
+    text-decoration: underline;
+}
+.profile li h4::after{
+    content: ":    "
 }
 
-.container li p{
+.profile li p{
     display: inline-block;
-    margin-left: 10px;
+    margin: 3px;
 }
 
+
+button{
+    margin: 3px; 
+    background-color: lightgray;
+    border: 1px solid gray; 
+    border-radius: 5px
+}
 

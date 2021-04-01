@@ -6,53 +6,78 @@
     margin: 0px;
     padding: 10px 0px;
     font-weight: 100;
+    color: rgb(150,150,150);
+    font-weight: 100;
+    letter-spacing: 1px;
+    font-size: 25px;
 }
 
+.event_container h5{
+    padding: 0px;
+    margin: 0px;
+    font-weight: 100;
+}
 .event_container .cont{
     display: inline-block;
-    width: 30%;
+    max-width: 30%;
+    min-width: 30%;
     margin: 1%;
     border-radius: 3px;
-    box-shadow: 2px 2px 10px 2px gray
+    border: 1px solid rgb(200,200,200);
+   
+
 }
 
-
+hr{
+    border-top: 1px solid lightgray;
+    margin: 0px;
+}
 
 .event_container .image_cont{
     width: 100%;
     position: relative;
-    height: 13%;
-}
-
-.event_container h2{
-    margin: 0px;
-    padding: 4px 0px;
-    font-weight: 300;
-}
-
-.image_cont .info{
-    width: 100%;
-    margin: 0px;
-}
-.image_cont .info h3{
-    margin: 0px;
-    padding: 0px;
-    font-weight: 100;
+    height: 170px;
+    overflow: hidden;
+    text-align: center;
     
 }
 
-.image_cont .info h5{
+
+.event_container .cont h2{
+    margin: 0px;
+    padding: 4px 0px 0px 0px;
+    font-weight: 300;
+}
+
+
+.event_container .cont h3{
+    margin: 0px;
+    padding: 0px;
+    font-weight: 100;
+    font-size: 13px;
+    margin-bottom: 10px;
+    
+}
+
+
+.icont .info{
+    width: 100%;
+    margin: 0px;
+}
+
+
+.cont .info h5{
     margin: 0px;
     padding: 0;
     font-weight: 200;
     text-align: right;
-    color: lightgray;
+    color: rgb(140,140,140);
     text-align: center;
 }
 
 .event_container img{
     width: 100%;
-    height: 100%;
+    min-height: 170px;
 }
 
 

@@ -1,12 +1,13 @@
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'events.settings')
-
+from django.utils.timezone import datetime
 import django
 django.setup()
 
+
 import random as random
 
-from events_app.models import EventUsers, AboutUser, UserGoals, Events, EventParticipation
+from events_app.models import User, AboutUser, UserGoals, Events, EventParticipation
 
 from django.db.models import Count, F
 
@@ -15,25 +16,27 @@ def populate():
     user_names = ['Jad', 'Ahmad', 'Fatma', 'Ali', 'Mariam', 'Karma', 'Aya']
     users = []
     for name in user_names:
-        user = add_user(name, name+"@email.com",name+"123")
+        user = add_user(name, name+"@email.com", str("123"+name+"456"))
         set_goals_and_bio(user, "My First goal " + name, name + " My Second goal", name + " my third goal", name + " my biooo")
         set_about(user, '1998-05-23', 'F', 'S', 'S')
         users.append(user)
     
-    events = [('Football', 'S', 'SCOT'), ('Basketball', 'S', 'LOND'), ('Boat Ride', 'F', 'LOND'), ('Party', 'F', 'WALE')]
+    events = [('Football', 'S', 'SCOT',"2021-07-23"), ('Basketball', 'S', 'LOND', "2021-05-7"), ('Boat Ride', 'F', 'LOND','2021-06-30'), ('Party', 'F', 'WALE', '2021-08-20')]
     
     for data in events:
         # not to create duplicate events, since they have random users
         if len(Events.objects.filter(name=data[0])) > 0:
             continue
-        event = add_event(data[0], data[1], 'event_images/football.jpeg', data[2], random.choice(users))
+        event = add_event(data[0], data[1], 'event_images/football.jpeg', data[2], random.choice(users), data[3])
         for i in range(int(random.random()*4)):
             add_participation(event, random.choice(users)).save()
         
 
 def add_user(name, email, password):
-    user = EventUsers.objects.get_or_create(name=name,mail=email,password=password)[0]
-    user.save()
+    user, created = User.objects.get_or_create(username=name, first_name=name, last_name="family", email=email)
+    if created:
+        user.set_password(password)
+        user.save()
     return user
 
 def set_goals_and_bio(user, goal1, goal2, goal3, bio):
@@ -47,8 +50,8 @@ def set_about(user, dob, gender, status, occupation):
     about.save()
     return about
     
-def add_event(name, category, image, location, creator):
-    event = Events.objects.get_or_create(name=name, category=category,image=image,location=location,creator=creator)[0]
+def add_event(name, category, image, location, creator, date):
+    event = Events.objects.get_or_create(name=name, category=category,image=image,location=location,creator=creator, event_date=date)[0]
     event.save()
     return event
 
@@ -56,17 +59,25 @@ def add_participation(event, user):
     part = EventParticipation.objects.get_or_create(event=event, user=user)[0]
     return part
 
-def get_most_popular(limit=3):
-    events = Events.objects.annotate(count=Count('eventparticipation'), creator_name=F('creator__name')).order_by('count')
 
-    
-    lst = events.values_list('name', 'category', 'count', 'image', 'creator_name').reverse()[0:limit]
-    return lst
-    
+def with_participations(lst, user):
+    newLst = []
+    for val in lst:
+        event = Events.objects.get(name=val[0])
+        participating = len(EventParticipation.objects.filter(user=user,event=event))>0
+        
+        newLst.append((val[0],val[1],val[2],val[3],val[4], val[5],participating))
+    return newLst
+
+def get_upcoming(limit=3, usr=None):
+    events = Events.objects.annotate(count=Count('eventparticipation'), creator_name=F('creator__username')).filter(event_date__gte=datetime.today()).order_by('event_date')
+    lst = events.values_list('name', 'category', 'count', 'image', 'creator_name', 'slug')[0:limit]
+    return with_participations(lst, usr)
+
 if __name__ == '__main__':
     print('Starting events population script...')
     populate()
-    print(get_most_popular())
+    print(with_participations(get_upcoming(), User.objects.get(username='Aya')))
     
 
     

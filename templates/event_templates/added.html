@@ -7,5 +7,5 @@
 
 
 {% block body_block %}
-<h4>You have successfully added a new event, url: /events/id</h4>
+<h4 style="padding: 30px; margin: 0px">You have successfully added a new event, <a href="{% url 'events_app:show_event' slug %}">{% url 'events_app:show_event' slug %}</a></h4>
 {% endblock %}

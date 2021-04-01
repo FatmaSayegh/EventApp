@@ -1,12 +1,12 @@
 from django import forms
 
-from events_app.models import EventUsers, AboutUser, UserGoals, Events
+from events_app.models import User, AboutUser, UserGoals, Events
 
 
 class UserForm(forms.ModelForm):
     class Meta:
-        model = EventUsers
-        exclude = ('user_id',)
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password')
         widgets = {
             'password': forms.PasswordInput()
         }
@@ -31,9 +31,11 @@ class GoalForm(forms.ModelForm):
 
         
 class EventCreationForm(forms.ModelForm):
+    slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     class Meta:
         model = Events
         exclude = ('event_id', 'creator')
+        
         
     
         

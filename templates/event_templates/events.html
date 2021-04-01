@@ -10,32 +10,38 @@ Events
 {% endblock %}
 
 
+
 {% block body_block %}
 
-
-
-{% for cat,count in categories.items %}
 <div class="event_container">
-    <h1>{{ cat }}</h1>
-        {% for i in count %}
+    {% for event_type in event_types %}
+        <h1>{{event_type.0}}</h1>
+        {% for event in event_type.1 %}
         <div class="cont">
-            <h2>Event Name</h2>
+            <h2>{{event.0}}</h2>
+            <h3>{{event.2}} Participating</h3>
             <div class="image_cont">
-                
-                <img src="{% static 'images/icon.png' %}">
-                <div class="info">
-                    <h3>1302 Participating</h3>
-                    <h5>Created by name..</h5>
-                </div>
+
+                <img src="{{ MEDIA_URL }}{{event.3}}">
+
+            </div>
+            <div class="info">
+                <h5>Created by {{event.4}}</h5>
             </div>
             <ul>
+                {% if event.6 %}
+                   <p>You are participating</p>
+                {% else %}
                 <li>Participating</li>
                 <li>Not this time</li>
+                {% endif %}
             </ul>
         </div>
         {% endfor %}
+        <hr>
+    {% endfor %}
+
 </div>
-{% endfor %}
 
 
 {% endblock %}

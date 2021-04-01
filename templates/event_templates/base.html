@@ -10,20 +10,34 @@
         {% block header_link %}
         
         {% endblock %}
+        
+        <script type="text/javascript">
+        function search(){
+            let slug = document.getElementById("search").value.replace(" ", "-")
+            url = "{% url 'events_app:search_event' 1234 %}".replace("1234",slug)
+            window.location = url
+        }
+        
+            
+        </script>
     </head>
     
     
     <body>
         <header>
             <div>
-                <img src="{% static 'images/logo.png' %}">
+                <img class="logo" src="{% static 'images/logo.png' %}">
 
                 <ul class="nav">
                     <li><a href="{% url 'events_app:index' %}">Home</a></li>
                     <li><a href="{% url 'events_app:about' %}">About</a></li>
                     <li><a href="{% url 'events_app:events' %}">Events</a></li>
-                    <li><a href="{% url 'events_app:register'%}">Register</a></li>
-                    <li><input type="text" placeholder="Search.."></li>
+                    {% if logged_in %}
+                        <li><a href="{% url 'events_app:profile'%}">Profile</a></li>
+                    {% else %}
+                        <li><a href="{% url 'events_app:register'%}">Register</a></li>
+                    {% endif %}
+                    <li><div class="search"><input id="search" type="text" placeholder="Search.."><img src="{% static 'images/search.png' %}" onclick="search()"></div></li>
                 </ul>
             </div>
             
@@ -55,7 +69,11 @@
                 <li><a href="{% url 'events_app:index' %}">Home</a></li>
                 <li><a href="{% url 'events_app:about' %}">About</a></li>
                 <li><a href="{% url 'events_app:events' %}">Events</a></li>
-                <li><a href="{% url 'events_app:register'%}">Register</a></li>
+                 {% if logged_in %}
+                    <li><a href="{% url 'events_app:profile'%}">Profile</a></li>
+                {% else %}
+                    <li><a href="{% url 'events_app:register'%}">Register</a></li>
+                {% endif %}
                 <li><input type="text" placeholder="Search.."></li>
             </ul>
         
@@ -64,5 +82,14 @@
     
     </body>
 
-
+    <script>
+    document.getElementById("search").addEventListener("keyup", function(event) {
+          if (event.keyCode === 13) {
+            event.preventDefault();
+            search()
+          }
+    });
+    
+    
+    </script>
 </html>

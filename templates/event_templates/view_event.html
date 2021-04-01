@@ -2,15 +2,19 @@
 {% load static %}
 
 {% block header_title %}
-Home
+About
 {% endblock %}
 
 {% block header_link %}
 <link rel="stylesheet" href="{% static 'styles/event.css' %}">
 {% endblock %}
 
+
 {% block body_block %}
 
+{% if not exists %}
+    <h1>Event doesn't exist</h1>
+{% else %}
 <div class="event_container">
     {% for event_type in event_types %}
         <h1>{{event_type.0}}</h1>
@@ -40,7 +44,5 @@ Home
     {% endfor %}
 
 </div>
-
-
-
+{% endif %}
 {% endblock %}
