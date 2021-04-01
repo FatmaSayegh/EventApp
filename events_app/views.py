@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse 
 from events_app.forms import UserForm, AboutForm, GoalForm, EventCreationForm
-from events_app.models import User, AboutUser, UserGoals, Events
+from events_app.models import User, AboutUser, UserGoals, Events, EventParticipation
 import events_app.event_loader as eLoader
 from datetime import datetime
 from django.shortcuts import redirect
@@ -45,13 +45,13 @@ def events(request):
 def disabled(request):
     if is_logged_in(request):
         return redirect(reverse('events_app:profile'))
-    return render(request, "event_templates/disabled.html", {'logged_in': is_logged_in(request)})
+    return render(request, "event_templates/message.html", {'logged_in': is_logged_in(request), 'message':'Your account has been disabled.'})
 
 
 def user_login(request):
     if is_logged_in(request):
         return redirect(reverse('events_app:profile'))
-    
+    error = "Enter your information"
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -63,8 +63,8 @@ def user_login(request):
             update_session(request)
             return redirect(reverse('events_app:profile'))
         else:
-            return redirect(reverse('events_app:disabled'))
-    context = {'app_name': APP_NAME, 'pop_events':eLoader.get_most_popular(), 'logged_in': is_logged_in(request)}
+            error = "Invalid Username or password"
+    context = {'app_name': APP_NAME, 'logged_in': is_logged_in(request), 'error':error}
 
     return render(request, "event_templates/login.html", context)
 
@@ -93,7 +93,7 @@ def profile(request):
     
     context = {'General': user_context_general, 'Goals': user_context_goals, 'Biography':user_goals.bio, 'logged_in': is_logged_in(request), 'event_types':event_context, "event_count":len(events)}
     
-    print("CONTEXT IS", context)
+
     
     return render(request, "event_templates/profile.html", context)
 
@@ -102,7 +102,7 @@ def register(request):
     # not use @login_required because of session timeout
     if is_logged_in(request):
         return redirect(reverse('events_app:profile'))
-    
+    errors = {}
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         
@@ -113,21 +113,24 @@ def register(request):
             user.set_password(user.password)
             user.save()
             
-            print("User saved!")
+
             about_form.user = user
             about_form.save()
-            print("About Failed to save")
+    
             goal_form.user = user
             goal_form.save()
             return render(request, "event_templates/registered.html")
         else:
-            print(user_form.errors, about_form.errors, goal_form.errors)
+            errors["user"] = user_form.errors 
+            errors["about"] = about_form.errors
+            errors["goals"] = goal_form.errors
     else:
         user_form = UserForm()
         about_form = AboutForm()
         goal_form = GoalForm()
     
-    context = {'app_name': APP_NAME, 'user_form':user_form, 'about_form': about_form, 'goal_form': goal_form, 'logged_in': is_logged_in(request)}
+    context = {'app_name': APP_NAME, 'user_form':user_form, 'about_form': about_form, 'goal_form': goal_form, 'logged_in': is_logged_in(request), "errors": errors}
+    
     return render(request, "event_templates/register.html", context)
 
 
@@ -142,7 +145,7 @@ def add_event(request):
             event.creator = request.user
             event.save()
             context = {'slug': event.slug}
-            print(context)
+
             return render(request, "event_templates/added.html", context)
         else:
             print(add_form.errors)
@@ -155,7 +158,7 @@ def add_event(request):
     
 def view_event(request, event_slug):
     update_session(request)
-    context = {}
+    context = {'logged_in': is_logged_in(request)}
     try:
         # add to context
         events = eLoader.get_by_slug(event_slug, request.user)
@@ -169,12 +172,12 @@ def view_event(request, event_slug):
         # nothing
         context['exists'] = False
         
-    print(context)
+
     return render(request, "event_templates/view_event.html", context)
 
 def search_event(request, search_slug):
     update_session(request)
-    context = {}
+    context = {'logged_in': is_logged_in(request)}
     try:
         # add to context
         events = eLoader.search(search_slug, request.user)
@@ -188,9 +191,50 @@ def search_event(request, search_slug):
         # nothing
         context['exists'] = False
         
-    print(context)
+   
     return render(request, "event_templates/view_event.html", context)
+ 
+def manage_event(request, manage_slug, action):
+    if not is_logged_in(request):
+        return redirect(reverse('events_app:login'))
     
+    if manage_slug == None or action == None:
+        return render(request, "event_templates/message.html", {"message":'Unknown error'})
+    
+    events = Events.objects.filter(slug=manage_slug)
+    if len(events) == 0 or events == None:
+        return render(request, "event_templates/message.html", {"message":'Invalid Event'})
+
+    event = events[0]
+    user  = request.user
+    
+    msg = ""
+   
+    # 0 means no 1 means yes    
+    if action == 0 or action == 1 or action == 2:
+        parts = EventParticipation.objects.filter(event=event, user=user)
+        if len(parts) == 0 and action != 2:
+            EventParticipation.objects.get_or_create(event=event, user=user, participating=bool(action))
+        else:
+            parts = parts[0]
+            if action != 2:
+                parts.participating = bool(action)
+                parts.save()
+            else:
+                parts.delete()
+                
+        events = EventParticipation.objects.filter(event=event,participating=True)
+        msg = "success:" + str(len(events))
+        
+    elif action == 3:
+        if not event.creator == request.user:
+            return render(request, "event_templates/message.html", {"message":'You can only delete your events'})
+        event.delete()
+        msg="success"
+    else:
+        msg = "error"
+    return HttpResponse(msg)
+        
 def is_logged_in(request):
     update_session(request)
     if request.user and request.user.is_authenticated:
@@ -208,7 +252,7 @@ def update_session(request):
         request.session.pop(SESSION_LOGIN_TIME)
     
     
-        
+    
     
     
 def get_session_elapsed(request):

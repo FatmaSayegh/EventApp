@@ -12,12 +12,14 @@
         {% endblock %}
         
         <script type="text/javascript">
-        function search(){
-            let slug = document.getElementById("search").value.replace(" ", "-")
+        function search(id){
+            let slug = document.getElementById(id).value.replace(" ", "-")
             url = "{% url 'events_app:search_event' 1234 %}".replace("1234",slug)
             window.location = url
         }
-        
+            
+         MANAGE_URL = "{% url 'events_app:manage_event' 1234 1 %}".replace("/1234/1", "")
+
             
         </script>
     </head>
@@ -37,7 +39,7 @@
                     {% else %}
                         <li><a href="{% url 'events_app:register'%}">Register</a></li>
                     {% endif %}
-                    <li><div class="search"><input id="search" type="text" placeholder="Search.."><img src="{% static 'images/search.png' %}" onclick="search()"></div></li>
+                    <li><div class="search"><input id="search" type="text" placeholder="Search.."><img src="{% static 'images/search.png' %}" onclick="search(search)"></div></li>
                 </ul>
             </div>
             
@@ -74,7 +76,7 @@
                 {% else %}
                     <li><a href="{% url 'events_app:register'%}">Register</a></li>
                 {% endif %}
-                <li><input type="text" placeholder="Search.."></li>
+               <li><div class="search"><input id="search_footer" type="text" placeholder="Search.."><img src="{% static 'images/search.png' %}" onclick="search(search_footer)"></div></li>
             </ul>
         
         </footer>
@@ -86,9 +88,17 @@
     document.getElementById("search").addEventListener("keyup", function(event) {
           if (event.keyCode === 13) {
             event.preventDefault();
-            search()
+            search("search")
           }
     });
+        
+        document.getElementById("search_footer").addEventListener("keyup", function(event) {
+          if (event.keyCode === 13) {
+            event.preventDefault();
+            search("search_footer")
+          }
+    });
+        
     
     
     </script>

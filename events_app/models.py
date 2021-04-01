@@ -74,7 +74,11 @@ class Events(models.Model):
     slug = models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name + str(self.event_id))
+        obj = Events.objects.latest('event_id')
+        id = 0
+        if not obj == None:
+            id = obj.event_id+1
+        self.slug = slugify(self.name + str(id))
         super(Events, self).save(*args, **kwargs)
     
 """
@@ -84,3 +88,4 @@ class Events(models.Model):
 class EventParticipation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, primary_key=False) 
     event = models.ForeignKey(Events, on_delete=models.CASCADE, primary_key=False) 
+    participating = models.BooleanField()

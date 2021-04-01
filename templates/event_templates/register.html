@@ -14,6 +14,7 @@ Register
 
 {% block body_block %}
 <h1>Register</h1>
+
 <p class="alreadyRegistered">Already registered? <a href="{% url 'events_app:login' %}">Login Here</a></p>
 <form id="registerForm" class="blocks" action="{% url 'events_app:register' %}"  enctype="multipart/form-data" method="POST">
 
@@ -21,6 +22,7 @@ Register
     
     <ul>
         <li>General</li>
+        {{errors.user}}
         {% for field in user_form.visible_fields %}
             <li><h4>{{field.label_tag}}</h4>{{field}}</li>
         {% endfor %}
@@ -28,6 +30,7 @@ Register
     
     <ul>
         <li>Goals</li>
+        {{errors.goals}}
         {% for field in goal_form.visible_fields %}
             {% if forloop.counter0 != 3 %}
                 <li><h4>{{field.label_tag}}</h4>{{field}}</li>
@@ -37,6 +40,7 @@ Register
     
     <ul>
         <li>About</li>
+        {{errors.about}}
         {% for field in about_form.visible_fields %}
             <li><h4>{{field.label_tag}}</h4>{{field}}</li>
         {% endfor %}

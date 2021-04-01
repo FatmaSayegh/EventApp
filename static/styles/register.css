@@ -72,3 +72,19 @@
     font-weight: 100;
     text-align: center;
 }
+
+.container .blocks ul.errorlist{
+    width: 100%;
+    font-size: 15px;
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid #ff00005e;
+    border-radius: 10px;
+    vertical-align: middle;
+    width: 90%;
+    margin: 3%;
+    padding: 1%;
+}
+.container .blocks ul.errorlist li{
+    font-size: 15px;
+}

@@ -17,5 +17,6 @@ urlpatterns = [
     path('disabled', views.disabled, name='disabled'),
     path('logout', views.user_logout, name='logout'),
     path('events/<slug:event_slug>/', views.view_event, name="show_event"),
-     path('search/<slug:search_slug>/', views.search_event, name="search_event"),
+    path('search/<slug:search_slug>/', views.search_event, name="search_event"),
+    path('manage/<slug:manage_slug>/<int:action>', views.manage_event, name="manage_event")
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

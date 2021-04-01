@@ -56,28 +56,14 @@ def add_event(name, category, image, location, creator, date):
     return event
 
 def add_participation(event, user):
-    part = EventParticipation.objects.get_or_create(event=event, user=user)[0]
+    part = EventParticipation.objects.get_or_create(event=event, user=user, participating=True)[0]
     return part
 
-
-def with_participations(lst, user):
-    newLst = []
-    for val in lst:
-        event = Events.objects.get(name=val[0])
-        participating = len(EventParticipation.objects.filter(user=user,event=event))>0
-        
-        newLst.append((val[0],val[1],val[2],val[3],val[4], val[5],participating))
-    return newLst
-
-def get_upcoming(limit=3, usr=None):
-    events = Events.objects.annotate(count=Count('eventparticipation'), creator_name=F('creator__username')).filter(event_date__gte=datetime.today()).order_by('event_date')
-    lst = events.values_list('name', 'category', 'count', 'image', 'creator_name', 'slug')[0:limit]
-    return with_participations(lst, usr)
 
 if __name__ == '__main__':
     print('Starting events population script...')
     populate()
-    print(with_participations(get_upcoming(), User.objects.get(username='Aya')))
+    print("done!")
     
 
     

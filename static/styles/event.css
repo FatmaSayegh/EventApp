@@ -109,3 +109,17 @@ hr{
     background-color: rgb(100,100,100);
 }
 
+.event_container li:hover{
+    cursor: pointer;
+}
+ul.count p{
+    text-align: center;
+    width: 100%;
+    margin: 0px;
+    padding: 6px;
+}
+ul.count  p:hover{
+    cursor: pointer;
+    
+}
+
