@@ -24,15 +24,12 @@
 {% block body_block %}
 <form method="POST" class="blocks" enctype="multipart/form-data" action="{% url 'events_app:login' %}">
     {% csrf_token %}
-    
-    
     <br>
     <ul>
         <li><h5 class="error">{{error}}</h5></li>
         <li><h4>Username</h4><input type="text" name="username"></li>
         <li><h4>Password</h4><input type="password" name="password"></li>
     </ul>
-    
     <input type="submit" name="submit">
 
 </form>

@@ -30,9 +30,13 @@
 
 .about .child{
     vertical-align: top;
-    width: 30%;
+    width: 25%;
     margin: 1%;
     display: inline-block;
+    border: 1px solid lightgray;
+    border-radius: 50%;
+    padding: 25px;
+    box-shadow: 1px 1px 5px gray;
     
 }
 
@@ -43,7 +47,7 @@
     height: auto;
     display: inline-block;
     vertical-align: top;
-    margin-top: 5%;
+    margin: 5% 0% 0% 3%;
 }
 
 .about .child div{

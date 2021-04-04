@@ -3,19 +3,6 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 # Create your models here.
 
-
-# The first model is called Users and contains the General info about the user
-# id, Name, email, password
-
-"""
-class EventUsers(models.Model):
-    NAME_SIZE = 200
-    MAIL_SIZE = 200
-    PASSWORD_SIZE = 50
-"""
-
-
-
 # The second model is called AboutUser and contains all the about info
 class AboutUser(models.Model):
     GENDER_IDS = [('M', 'Male'), ('F', "Female"), ('O', "Other")]
