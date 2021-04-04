@@ -1,29 +1,67 @@
 .about{
     text-align: center;
 }
-.about h2{
+.about h1{
+     margin: 0px;
+    padding: 15px 0px 3px 0px;
     text-align: center;
     color: gray;
-    border-bottom: 2px solid gray;
-    display: inline-block;
+    text-transform: uppercase;
+    font-size: 30px;
     font-weight: 100;
+
+}
+
+.about h2{
+     margin: 0px;
+    padding: 2px;
+    text-align: center;
+    color: gray;
+    font-size: 18px;;
+    font-weight: 100;
+
+}
+
+.about .parent{
+    text-align: center;
+    margin-top: 20px;
     
 }
 
-.about p{
-    font-size: 20px;
-    margin: 10px;
-    display: block;
-    text-align: left;
+.about .child{
+    vertical-align: top;
+    width: 30%;
+    margin: 1%;
+    display: inline-block;
+    
 }
 
-.about a{
+.about .child img{
     display: block;
+    width: 20%;
+    max-width: 60px;
+    height: auto;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5%;
+}
+
+.about .child div{
+    display: inline-block;
+    width: 75%;
+    text-align: justify;
+}
+
+.about .child div h3{
     text-align: center;
+    word-break: keep-all;
+    white-space: nowrap;
+    font-weight: 100;
     font-size: 20px;
-    margin: 10px;
+    margin: 0px;
+    letter-spacing: 2px;
 }
 
-.about a:hover{
-    color: pink;
+.about .child div{
+    font-size: 15px;
 }

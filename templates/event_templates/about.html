@@ -12,13 +12,56 @@ About
 
 {% block body_block %}
 <div class="about">
-    <h2>What is Events?</h2>
-    <p>Events is an app which allows you to create and explore events. </p>
+    <h1>ABOUT</h1>
+    <h2>Events is used to find any events near you or at a certain Location.</h2>
+    <h2>Events shows the most popular events near you</h2>
 
-    <h2>Who can use it?</h2>
-    <p>Anyone who has an event which he/she wishes to share with other people to allow them to publically attend it.</p>
-
-    <h2>How can i start?</h2>
-    <a href="{% url 'events_app:register' %}">Register</a>
+    <div class="parent">
+        <div class="child">
+            <img src="{% static 'images/check.png' %}">
+            <div>
+                <h3>Browse any Event</h3>
+                <p>You can browse events by searching through the search bar in the header and footer. You can also see the most popular events.</p>
+            </div>
+        
+        </div>
+        
+        <div class="child">
+            <img src="{% static 'images/check.png' %}">
+            <div>
+                <h3>Event Participation</h3>
+                <p>You can opt in and out of events to allow others to see how many participants an event will have, and get an accurate count.</p>
+            </div>
+        
+        </div>
+        
+        <div class="child">
+            <img src="{% static 'images/check.png' %}">
+            <div>
+                <h3>Create an Event</h3>
+                <p>Create your own event in the profile page. View all the events you created as well as how many participants are in each. You are also allowed to delete your events</p>
+            </div>
+        
+        </div>
+        
+        <div class="child">
+            <img src="{% static 'images/check.png' %}">
+            <div>
+                <h3>Find specific Events</h3>
+                <p>You can search for events, view and share the events, and find events based on category, date of creation, or date of event.</p>
+            </div>
+        
+        </div>
+        
+        
+        <div class="child">
+            <img src="{% static 'images/check.png' %}">
+            <div>
+                <h3>Unique Event links</h3>
+                <p>Share your event through the uniquely generated link for each event. Just click on the event title.</p>
+            </div>
+        
+        </div>
+    </div>
 </div>
 {% endblock %}

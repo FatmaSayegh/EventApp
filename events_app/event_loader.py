@@ -3,6 +3,14 @@ from django.db.models import Count, F
 from django.utils.timezone import datetime
 from django.db.models import Q
 
+
+
+def get_by_category(category, limit=3, usr=None):
+    events = Events.objects.annotate(count=Count('eventparticipation', filter=Q(eventparticipation__participating=True)), creator_name=F('creator__username')).filter(category=category).order_by('-count')
+    lst = events.values_list('name', 'category', 'count', 'image', 'creator_name', 'slug')[0:limit]
+    return with_participations(lst, usr)
+
+
 def get_most_popular(limit=3, usr=None):
     events = Events.objects.annotate(count=Count('eventparticipation', filter=Q(eventparticipation__participating=True)), creator_name=F('creator__username')).order_by('-count')
     lst = events.values_list('name', 'category', 'count', 'image', 'creator_name', 'slug')[0:limit]

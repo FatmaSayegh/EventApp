@@ -19,7 +19,7 @@ Events
         <h1>{{event_type.0}}</h1>
         {% for event in event_type.1 %}
         <div class="cont" class="{{event.5}}_container">
-            <h2>{{event.0}}</h2>
+            <h2><a href="{% url 'events_app:show_event' event.5 %}">{{event.0}}</a></h2>
             <h3 class="{{event.5}}_count">{{event.2}} Participating</h3>
             <div class="image_cont">
 

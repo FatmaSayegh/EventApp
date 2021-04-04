@@ -26,3 +26,4 @@ urlpatterns = [
     path('', include('events_app.urls')), # anything with / is managed by the the events app
     path('admin/', admin.site.urls),
 ] 
+

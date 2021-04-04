@@ -50,6 +50,17 @@ hr{
 }
 
 
+
+.event_container .cont h2 a{
+    text-decoration: none;
+    color: black;
+}
+
+.event_container .cont h2 a:hover{
+    text-decoration: none;
+    color: darkred;
+}
+
 .event_container .cont h3{
     margin: 0px;
     padding: 0px;

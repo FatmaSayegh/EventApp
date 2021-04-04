@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+import populate as populate
 # generate some constants
 APP_NAME = 'Events'
 MOST_POP_EVENTS_COUNT = 3
@@ -26,9 +27,14 @@ This will use the base.html template, along with th index.html files
 to generte the view
 """
 def index(request):
-    context = {'app_name': APP_NAME, 'event_types':{('Most Popular Events', eLoader.get_most_popular(usr=request.user)), 
-               ('Recent Events',eLoader.get_most_recent(usr=request.user)),('Upcoming Events',eLoader.get_upcoming(usr=request.user))},
+
+    context = {'app_name': APP_NAME, 'event_types':
+               {
+                   ('Most Popular Events', eLoader.get_most_popular(usr=request.user)), 
+                   ('Recent Events',eLoader.get_most_recent(usr=request.user)),
+                   ('Upcoming Events',eLoader.get_upcoming(usr=request.user))},
                'logged_in': is_logged_in(request)}
+    
     return render(request, "event_templates/index.html", context)
     
 def about(request):
@@ -37,9 +43,15 @@ def about(request):
 
 def events(request):
     x = range(3)
-    context = {'app_name': APP_NAME, 'event_types':{('Most Popular Events', eLoader.get_most_popular(usr=request.user)), 
-               ('Recent Events',eLoader.get_most_recent(usr=request.user)),('Upcoming Events',eLoader.get_upcoming(usr=request.user))},
+    context = {'app_name': APP_NAME, 'event_types':[('Most Popular Events', eLoader.get_most_popular(usr=request.user)), 
+               ('Recent Events',eLoader.get_most_recent(usr=request.user)),('Upcoming Events',eLoader.get_upcoming(usr=request.user))],
                'logged_in': is_logged_in(request)}
+    for cat in Events.CATEGORIES:
+        events = eLoader.get_by_category(usr=request.user, category=cat[0])
+        if len(events) > 0:
+            context['event_types'].append((cat[1] + " Events", events))
+  
+            
     return render(request, "event_templates/events.html", context)
     
 def disabled(request):
@@ -60,6 +72,7 @@ def user_login(request):
         
         if (not user == None) and user.is_active:
             login(request, user)
+            validate_model(user)
             update_session(request)
             return redirect(reverse('events_app:profile'))
         else:
@@ -109,11 +122,12 @@ def register(request):
         about_form = AboutForm(request.POST)
         goal_form = GoalForm(request.POST)
         if user_form.is_valid() and about_form.is_valid() and goal_form.is_valid():
-            user = user_form.save()
+            user = user_form.save(commit=False)
             user.set_password(user.password)
             user.save()
             
-
+            
+            
             about_form.user = user
             about_form.save()
     
@@ -144,9 +158,8 @@ def add_event(request):
             event = add_form.save(commit=False)
             event.creator = request.user
             event.save()
-            context = {'slug': event.slug}
 
-            return render(request, "event_templates/added.html", context)
+            return view_event(request, event.slug)
         else:
             print(add_form.errors)
     else:
@@ -236,12 +249,15 @@ def manage_event(request, manage_slug, action):
     return HttpResponse(msg)
         
 def is_logged_in(request):
-    update_session(request)
     if request.user and request.user.is_authenticated:
         if get_session_elapsed(request) > SESSION_TIMEOUT:
             logout(request)
+            update_session(request)
             return False
+        validate_model(request.user)
+        update_session(request)
         return True
+    update_session(request)
     return False
 
 
@@ -252,7 +268,16 @@ def update_session(request):
         request.session.pop(SESSION_LOGIN_TIME)
     
     
+def validate_model(user):
+    if not user.is_authenticated:
+        return
     
+    if AboutUser.objects.filter(user=user).count() == 0:
+        populate.set_about(user, "2000-1-1",  'O', 'S', 'S')
+        
+    
+    if UserGoals.objects.filter(user=user).count() == 0:
+        populate.set_goals_and_bio(user, "G1", "G2", "G3", "BIO")
     
     
 def get_session_elapsed(request):

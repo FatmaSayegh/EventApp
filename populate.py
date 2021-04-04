@@ -13,7 +13,7 @@ from django.db.models import Count, F
 
 
 def populate():
-    user_names = ['Jad', 'Ahmad', 'Fatma', 'Ali', 'Mariam', 'Karma', 'Aya']
+    user_names = ['Jad', 'Ahmad', 'Fatma', 'Ali', 'Mariam', 'Karma', 'Aya', 'Xiangyu', 'Tingyu', 'Andreas', 'Mihail']
     users = []
     for name in user_names:
         user = add_user(name, name+"@email.com", str("123"+name+"456"))
@@ -21,13 +21,13 @@ def populate():
         set_about(user, '1998-05-23', 'F', 'S', 'S')
         users.append(user)
     
-    events = [('Football', 'S', 'SCOT',"2021-07-23"), ('Basketball', 'S', 'LOND', "2021-05-7"), ('Boat Ride', 'F', 'LOND','2021-06-30'), ('Party', 'F', 'WALE', '2021-08-20')]
+    events = [('Football', 'S', 'SCOT',"2021-07-23"), ('Basketball', 'S', 'LOND', "2021-05-7"), ('Boat Ride', 'F', 'LOND','2021-06-30'), ('Party', 'F', 'WALE', '2021-08-20'), ("Cleaning the Beach", 'O', "LOND", "2021-06-08"), ("Car Racing", "S", "WALE", "2021-07-23")]
     
     for data in events:
         # not to create duplicate events, since they have random users
         if len(Events.objects.filter(name=data[0])) > 0:
             continue
-        event = add_event(data[0], data[1], 'event_images/football.jpeg', data[2], random.choice(users), data[3])
+        event = add_event(data[0], data[1], 'event_images/' + data[0].replace(" ", "").lower() + '.jpeg', data[2], random.choice(users), data[3])
         for i in range(int(random.random()*4)):
             add_participation(event, random.choice(users)).save()
         
